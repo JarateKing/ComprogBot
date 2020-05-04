@@ -29,54 +29,53 @@ async def on_message(message):
 	if message.content.startswith('!euler') or message.content.startswith('!projecteuler'):
 		await message.channel.send("<:euler:706923688942895104> <https://projecteuler.net/>")
 		
-	if message.content.startswith('!problem euler') or message.content.startswith('!problem projecteuler'):
+	if message.content.startswith('!problem'):
 		vals = message.content.split()
 		num_probs = 1
-		output_message = ""
+		output_message = "a"
 		
-		if (len(vals) is 3):
-			num_probs = min(20, max(1, int(vals[2])))
+		random_type = -1
+		if (len(vals) is 1):
+			random_type = random.randrange(2)
 		
-		for iteration in range(num_probs):
-			choice = random.randrange(700)
-			link = "https://projecteuler.net/problem=" + str(choice)
-			prev_message = output_message
-			output_message += "<:euler:706923688942895104> <" + link + ">\n"
-			if (len(output_message) > 2000):
-				output_message = prev_message
-			
-		await message.channel.send(output_message)
-			
-	
-	if message.content.startswith('!problem codeforces'):
-		vals = message.content.split()
-		choice = random.randrange(len(codeforces_ids))
-		num_probs = 1
-		output_message = ""
-		
-		if (len(vals) is 5):
-			num_probs = min(20, max(1, int(vals[4])))
-			vals.pop()
-		
-		for iteration in range(num_probs):
-			if (len(vals) is 4):
-				lower = int(vals[2])
-				upper = int(vals[3])
-				ids = []
-				for i in range(lower - (lower % 100), upper+1, 100):
-					if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
-						ids.extend(codeforces_bydifficulty[i])
-				choice = random.choice(ids)
-			
+		if ((random_type is 0) or (len(vals) > 1 and (vals[1] == 'euler' or vals[1] == 'projecteuler'))):
 			if (len(vals) is 3):
-				if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
-					choice = random.choice(codeforces_bydifficulty[int(vals[2])])
-			
-			link = "https://codeforces.com/problemset/problem/" + str(codeforces_ids[choice]["contestId"]) + "/" + codeforces_ids[choice]["index"]
-			prev_message = output_message
-			output_message += "<:codeforces:704170636049645639> " + codeforces_ids[choice]["name"] + " - <" + link + ">\n"
-			if (len(output_message) > 2000):
-				output_message = prev_message
+				num_probs = min(20, max(1, int(vals[2])))
+		
+			for iteration in range(num_probs):
+				choice = random.randrange(700)
+				link = "https://projecteuler.net/problem=" + str(choice)
+				prev_message = output_message
+				output_message += "<:euler:706923688942895104> <" + link + ">\n"
+				if (len(output_message) > 2000):
+					output_message = prev_message
+					
+		if ((random_type is 1) or (len(vals) > 1 and vals[1] == 'codeforces')):
+			if (len(vals) is 5):
+				num_probs = min(20, max(1, int(vals[4])))
+				vals.pop()
+		
+			for iteration in range(num_probs):
+				choice = random.randrange(len(codeforces_ids))
+				
+				if (len(vals) is 4):
+					lower = int(vals[2])
+					upper = int(vals[3])
+					ids = []
+					for i in range(lower - (lower % 100), upper+1, 100):
+						if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
+							ids.extend(codeforces_bydifficulty[i])
+					choice = random.choice(ids)
+				
+				if (len(vals) is 3):
+					if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
+						choice = random.choice(codeforces_bydifficulty[int(vals[2])])
+				
+				link = "https://codeforces.com/problemset/problem/" + str(codeforces_ids[choice]["contestId"]) + "/" + codeforces_ids[choice]["index"]
+				prev_message = output_message
+				output_message += "<:codeforces:704170636049645639> " + codeforces_ids[choice]["name"] + " - <" + link + ">\n"
+				if (len(output_message) > 2000):
+					output_message = prev_message
 			
 		await message.channel.send(output_message)
 
