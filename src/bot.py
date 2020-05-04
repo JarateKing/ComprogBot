@@ -29,21 +29,30 @@ async def on_message(message):
 	if message.content.startswith('!problem codeforces'):
 		vals = message.content.split()
 		choice = random.randrange(len(codeforces_ids))
+		num_probs = 1
+		output_message = ""
 		
-		if (len(vals) is 3):
-			if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
-				choice = random.choice(codeforces_bydifficulty[int(vals[2])])
+		if (len(vals) is 5):
+			num_probs = int(vals[4])
+			vals.pop()
 		
-		if (len(vals) is 4):
-			lower = int(vals[2])
-			upper = int(vals[3])
-			ids = []
-			for i in range(lower - (lower % 100), upper+1, 100):
-				if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
-					ids.extend(codeforces_bydifficulty[i])
-			choice = random.choice(ids)
+		for iteration in range(num_probs):
+			if (len(vals) is 4):
+				lower = int(vals[2])
+				upper = int(vals[3])
+				ids = []
+				for i in range(lower - (lower % 100), upper+1, 100):
+					if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
+						ids.extend(codeforces_bydifficulty[i])
+				choice = random.choice(ids)
 			
-		link = "https://codeforces.com/problemset/problem/" + str(codeforces_ids[choice]["contestId"]) + "/" + codeforces_ids[choice]["index"]
-		await message.channel.send("<:codeforces:704170636049645639> " + codeforces_ids[choice]["name"] + " - " + link)
+			if (len(vals) is 3):
+				if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
+					choice = random.choice(codeforces_bydifficulty[int(vals[2])])
+			
+			link = "https://codeforces.com/problemset/problem/" + str(codeforces_ids[choice]["contestId"]) + "/" + codeforces_ids[choice]["index"]
+			output_message += "<:codeforces:704170636049645639> " + codeforces_ids[choice]["name"] + " - " + link + "\n"
+			
+		await message.channel.send(output_message)
 
 client.run(token)
