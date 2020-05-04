@@ -33,7 +33,7 @@ async def on_message(message):
 		output_message = ""
 		
 		if (len(vals) is 5):
-			num_probs = int(vals[4])
+			num_probs = min(20, max(1, int(vals[4])))
 			vals.pop()
 		
 		for iteration in range(num_probs):
@@ -51,7 +51,10 @@ async def on_message(message):
 					choice = random.choice(codeforces_bydifficulty[int(vals[2])])
 			
 			link = "https://codeforces.com/problemset/problem/" + str(codeforces_ids[choice]["contestId"]) + "/" + codeforces_ids[choice]["index"]
+			prev_message = output_message
 			output_message += "<:codeforces:704170636049645639> " + codeforces_ids[choice]["name"] + " - " + link + "\n"
+			if (len(output_message) > 2000):
+				output_message = prev_message
 			
 		await message.channel.send(output_message)
 
