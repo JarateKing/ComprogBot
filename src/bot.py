@@ -31,7 +31,8 @@ async def on_message(message):
 		choice = random.randrange(len(codeforces_ids))
 		
 		if (len(vals) is 3):
-			choice = random.choice(codeforces_bydifficulty[int(vals[2])])
+			if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
+				choice = random.choice(codeforces_bydifficulty[int(vals[2])])
 			
 		link = "https://codeforces.com/problemset/problem/" + str(codeforces_ids[choice]["contestId"]) + "/" + codeforces_ids[choice]["index"]
 		await message.channel.send("<:codeforces:704170636049645639> " + codeforces_ids[choice]["name"] + " - " + link)
