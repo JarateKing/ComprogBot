@@ -25,6 +25,9 @@ async def on_message(message):
 	
 	if message.content.startswith('!codeforces'):
 		await message.channel.send("<:codeforces:704170636049645639> <https://codeforces.com/>")
+		
+	if message.content.startswith('!euler') or message.content.startswith('!projecteuler'):
+		await message.channel.send("<:euler:706923688942895104> <https://projecteuler.net/>")
 	
 	if message.content.startswith('!problem codeforces'):
 		vals = message.content.split()
