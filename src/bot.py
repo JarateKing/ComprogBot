@@ -10,9 +10,9 @@ async def on_message(message):
         return
     
     if message.content.startswith('!kattis'):
-        await message.channel.send(":kattis: https://open.kattis.com/")
+        await message.channel.send("<:kattis:704169451163222128> https://open.kattis.com/")
     
     if message.content.startswith('!codeforces'):
-        await message.channel.send(":codeforces: https://codeforces.com/")
+        await message.channel.send("<:codeforces:704170636049645639> https://codeforces.com/")
 
 client.run(token)
