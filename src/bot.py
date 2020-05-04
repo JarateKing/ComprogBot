@@ -28,6 +28,25 @@ async def on_message(message):
 		
 	if message.content.startswith('!euler') or message.content.startswith('!projecteuler'):
 		await message.channel.send("<:euler:706923688942895104> <https://projecteuler.net/>")
+		
+	if message.content.startswith('!problem euler') or message.content.startswith('!problem projecteuler'):
+		vals = message.content.split()
+		num_probs = 1
+		output_message = ""
+		
+		if (len(vals) is 3):
+			num_probs = min(20, max(1, int(vals[2])))
+		
+		for iteration in range(num_probs):
+			choice = random.randrange(700)
+			link = "https://projecteuler.net/problem=" + str(choice)
+			prev_message = output_message
+			output_message += "<:euler:706923688942895104> <" + link + ">\n"
+			if (len(output_message) > 2000):
+				output_message = prev_message
+			
+		await message.channel.send(output_message)
+			
 	
 	if message.content.startswith('!problem codeforces'):
 		vals = message.content.split()
