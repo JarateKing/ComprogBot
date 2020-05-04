@@ -21,10 +21,10 @@ async def on_message(message):
 		return
 	
 	if message.content.startswith('!kattis'):
-		await message.channel.send("<:kattis:704169451163222128> https://open.kattis.com/")
+		await message.channel.send("<:kattis:704169451163222128> <https://open.kattis.com/>")
 	
 	if message.content.startswith('!codeforces'):
-		await message.channel.send("<:codeforces:704170636049645639> https://codeforces.com/")
+		await message.channel.send("<:codeforces:704170636049645639> <https://codeforces.com/>")
 	
 	if message.content.startswith('!problem codeforces'):
 		vals = message.content.split()
@@ -52,7 +52,7 @@ async def on_message(message):
 			
 			link = "https://codeforces.com/problemset/problem/" + str(codeforces_ids[choice]["contestId"]) + "/" + codeforces_ids[choice]["index"]
 			prev_message = output_message
-			output_message += "<:codeforces:704170636049645639> " + codeforces_ids[choice]["name"] + " - " + link + "\n"
+			output_message += "<:codeforces:704170636049645639> " + codeforces_ids[choice]["name"] + " - <" + link + ">\n"
 			if (len(output_message) > 2000):
 				output_message = prev_message
 			
