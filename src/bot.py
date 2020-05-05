@@ -11,6 +11,8 @@ codeforces_bydifficulty = defaultdict(list)
 for i in range(len(codeforces_ids)):
 	if "rating" in codeforces_ids[i]:
 		codeforces_bydifficulty[codeforces_ids[i]["rating"]].append(i)
+		
+uva_problems = requests.get("https://uhunt.onlinejudge.org/api/p").json()
 
 client = discord.Client()
 
@@ -28,6 +30,9 @@ async def on_message(message):
 		
 	if message.content.startswith('!euler') or message.content.startswith('!projecteuler'):
 		await message.channel.send("<:euler:706923688942895104> <https://projecteuler.net/>")
+		
+	if message.content.startswith('!uva'):
+		await message.channel.send("<:uva:707075805418749983> <https://uhunt.onlinejudge.org/>")
 		
 	if message.content.startswith('!problem'):
 		vals = message.content.split()
@@ -47,6 +52,18 @@ async def on_message(message):
 				link = "https://projecteuler.net/problem=" + str(choice)
 				prev_message = output_message
 				output_message += "<:euler:706923688942895104> <" + link + ">\n"
+				if (len(output_message) > 2000):
+					output_message = prev_message
+					
+		if ((random_type is 1) or (len(vals) > 1 and vals[1] == 'uva')):
+			if (len(vals) is 3):
+				num_probs = min(20, max(1, int(vals[2])))
+		
+			for iteration in range(num_probs):
+				choice = random.randrange(len(uva_problems))
+				link = "https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=3&page=show_problem&problem=" + str(uva_problems[choice][0])
+				prev_message = output_message
+				output_message += "<:uva:707075805418749983> " + uva_problems[choice][2] + " - <" + link + ">\n"
 				if (len(output_message) > 2000):
 					output_message = prev_message
 					
