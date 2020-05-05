@@ -32,7 +32,7 @@ async def on_message(message):
 	if message.content.startswith('!problem'):
 		vals = message.content.split()
 		num_probs = 1
-		output_message = "a"
+		output_message = ""
 		
 		random_type = -1
 		if (len(vals) is 1):
