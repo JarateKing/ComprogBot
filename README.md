@@ -6,9 +6,12 @@ This is a discord bot for various competitive programming help and utilities.
 
 ```
 !kattis
-````
-
-```
 !codeforces
-```
+!euler
+!uva
 
+!problem
+!problem codeforces [min rating] [max rating] [number to fetch]
+!problem euler [number to fetch]
+!problem uva [number to fetch]
+```
