@@ -41,7 +41,7 @@ async def on_message(message):
 		
 		random_type = -1
 		if (len(vals) is 1):
-			random_type = random.randrange(2)
+			random_type = random.randrange(3)
 		
 		if ((random_type is 0) or (len(vals) > 1 and (vals[1] == 'euler' or vals[1] == 'projecteuler'))):
 			if (len(vals) is 3):
@@ -67,7 +67,7 @@ async def on_message(message):
 				if (len(output_message) > 2000):
 					output_message = prev_message
 					
-		if ((random_type is 1) or (len(vals) > 1 and vals[1] == 'codeforces')):
+		if ((random_type is 2) or (len(vals) > 1 and vals[1] == 'codeforces')):
 			if (len(vals) is 5):
 				num_probs = min(20, max(1, int(vals[4])))
 				vals.pop()
