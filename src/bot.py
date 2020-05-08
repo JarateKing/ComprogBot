@@ -5,6 +5,8 @@ import discord
 import requests
 import json
 
+
+# setup codeforces problems
 codeforces_problems = requests.get("https://codeforces.com/api/problemset.problems").json()
 codeforces_ids = codeforces_problems["result"]["problems"]
 codeforces_bydifficulty = defaultdict(list)
@@ -12,7 +14,11 @@ for i in range(len(codeforces_ids)):
 	if "rating" in codeforces_ids[i]:
 		codeforces_bydifficulty[codeforces_ids[i]["rating"]].append(i)
 		
+# setup uva problems
 uva_problems = requests.get("https://uhunt.onlinejudge.org/api/p").json()
+
+# setup atcoder problems
+atcoder_problems = requests.get("https://kenkoooo.com/atcoder/resources/problems.json").json()
 
 client = discord.Client()
 
@@ -34,6 +40,9 @@ async def on_message(message):
 	if message.content.startswith('!uva'):
 		await message.channel.send("<:uva:707075805418749983> <https://uhunt.onlinejudge.org/>")
 		
+	if message.content.startswith('!atcoder'):
+		await message.channel.send("<:atcoder:708137443035185172> <https://kenkoooo.com/atcoder/>")
+		
 	if message.content.startswith('!problem'):
 		vals = message.content.split()
 		num_probs = 1
@@ -41,7 +50,7 @@ async def on_message(message):
 		
 		random_type = -1
 		if (len(vals) is 1):
-			random_type = random.randrange(3)
+			random_type = random.randrange(4)
 		
 		if ((random_type is 0) or (len(vals) > 1 and (vals[1] == 'euler' or vals[1] == 'projecteuler'))):
 			if (len(vals) is 3):
@@ -66,8 +75,20 @@ async def on_message(message):
 				output_message += "<:uva:707075805418749983> " + uva_problems[choice][2] + " - <" + link + ">\n"
 				if (len(output_message) > 2000):
 					output_message = prev_message
+		
+		if ((random_type is 2) or (len(vals) > 1 and vals[1] == 'atcoder')):
+			if (len(vals) is 3):
+				num_probs = min(20, max(1, int(vals[2])))
+		
+			for iteration in range(num_probs):
+				choice = random.randrange(len(atcoder_problems))
+				link = "https://atcoder.jp/contests/" + str(atcoder_problems[choice]['contest_id']) + "/tasks/" + str(atcoder_problems[choice]['id'])
+				prev_message = output_message
+				output_message += "<:atcoder:708137443035185172> <" + link + ">\n"
+				if (len(output_message) > 2000):
+					output_message = prev_message
 					
-		if ((random_type is 2) or (len(vals) > 1 and vals[1] == 'codeforces')):
+		if ((random_type is 3) or (len(vals) > 1 and vals[1] == 'codeforces')):
 			if (len(vals) is 5):
 				num_probs = min(20, max(1, int(vals[4])))
 				vals.pop()
