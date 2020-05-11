@@ -109,8 +109,8 @@ async def on_message(message):
 					lower = float(vals[2])
 					upper = float(vals[3])
 					ids = []
-					for i in range(lower, upper + 0.1, 0.1):
-						ids.extend(kattis_bydifficulty[str(i)])
+					for i in range(int(lower * 10), int((upper + 0.1) * 10)):
+						ids.extend(kattis_bydifficulty[str(i / 10)])
 					choice = random.choice(ids)
 				
 				if (len(vals) is 3):
