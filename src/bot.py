@@ -1,10 +1,17 @@
 from private_token import token
 from collections import defaultdict
+from bs4 import BeautifulSoup
+from fake_useragent import UserAgent
 import random
 import discord
 import requests
 import json
 
+# setup kattis problems
+kattis_problems = requests.get("https://chrismac.dev/kattis/problems").json()['problems']
+kattis_bydifficulty = defaultdict(list)
+for i in range(len(kattis_problems)):
+	kattis_bydifficulty[kattis_problems[i]["difficulty"]].append(i)
 
 # setup codeforces problems
 codeforces_problems = requests.get("https://codeforces.com/api/problemset.problems").json()
@@ -21,6 +28,8 @@ uva_problems = requests.get("https://uhunt.onlinejudge.org/api/p").json()
 atcoder_problems = requests.get("https://kenkoooo.com/atcoder/resources/problems.json").json()
 
 client = discord.Client()
+
+print("bot ready")
 
 @client.event
 async def on_message(message):
@@ -50,7 +59,7 @@ async def on_message(message):
 		
 		random_type = -1
 		if (len(vals) is 1):
-			random_type = random.randrange(4)
+			random_type = random.randrange(5)
 		
 		if ((random_type is 0) or (len(vals) > 1 and (vals[1] == 'euler' or vals[1] == 'projecteuler'))):
 			if (len(vals) is 3):
@@ -87,8 +96,35 @@ async def on_message(message):
 				output_message += "<:atcoder:708137443035185172> <" + link + ">\n"
 				if (len(output_message) > 2000):
 					output_message = prev_message
+		
+		if ((random_type is 3) or (len(vals) > 1 and vals[1] == 'kattis')):
+			if (len(vals) is 5):
+				num_probs = min(20, max(1, int(vals[4])))
+				vals.pop()
+			
+			for iteration in range(num_probs):
+				choice = random.randrange(len(kattis_problems))
+				
+				if (len(vals) is 4):
+					lower = float(vals[2])
+					upper = float(vals[3])
+					ids = []
+					for i in range(lower, upper + 0.1, 0.1):
+						ids.extend(kattis_bydifficulty[str(i)])
+					choice = random.choice(ids)
+				
+				if (len(vals) is 3):
+					if (len(kattis_bydifficulty[vals[2]]) > 0):
+						choice = random.choice(kattis_bydifficulty[vals[2]])
+				
+				link = "https://open.kattis.com/problems/" + kattis_problems[choice]["_id"]
+				prev_message = output_message
+				output_message += "<:kattis:704169451163222128> " + kattis_problems[choice]["name"] + " - <" + link + ">\n"
+				if (len(output_message) > 2000):
+					output_message = prev_message
+							
 					
-		if ((random_type is 3) or (len(vals) > 1 and vals[1] == 'codeforces')):
+		if ((random_type is 4) or (len(vals) > 1 and vals[1] == 'codeforces')):
 			if (len(vals) is 5):
 				num_probs = min(20, max(1, int(vals[4])))
 				vals.pop()
@@ -101,8 +137,7 @@ async def on_message(message):
 					upper = int(vals[3])
 					ids = []
 					for i in range(lower - (lower % 100), upper+1, 100):
-						if (len(codeforces_bydifficulty[int(vals[2])]) > 0):
-							ids.extend(codeforces_bydifficulty[i])
+						ids.extend(codeforces_bydifficulty[i])
 					choice = random.choice(ids)
 				
 				if (len(vals) is 3):
